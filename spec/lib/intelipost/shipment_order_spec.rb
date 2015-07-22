@@ -1,4 +1,4 @@
-# coding: utf-8
+# coding =>  utf-8
 
 describe Intelipost::ShipmentOrder do
   subject { Intelipost::ShipmentOrder.new(double('Intelipost::Client')) }
@@ -80,6 +80,42 @@ describe Intelipost::ShipmentOrder do
   it 'invoice update' do
     expect(subject.connection).to receive(:post).with('shipment_order/set_invoice', order_invoice)
     subject.set_invoice.update(order_invoice)
+  end
+
+
+  let(:order_volumes) do
+    {
+      'order_number' => '12314324',
+      'shipment_order_volume_array' => [
+        {
+          'shipment_order_volume_number' => '1',
+          'weight' => 1.0,
+          'volume_type_code' => 'box',
+          'width' => 10.0,
+          'height' => 20.0,
+          'length' => 30.0,
+          'products_nature' => 'beverages',
+          'products_quantity' => 3,
+          'is_icms_exempt' =>  false,
+          'tracking_code' =>  'SW123456789BR',
+          'shipment_order_volume_invoice' => 
+          {
+            'invoice_series' => '123123123',
+            'invoice_number' => 'BR283248123',
+            'invoice_key' => 'CDFx2342396078192310231982',
+            'invoice_date' => '2014-02-28',
+            'invoice_total_value' => 32.49,
+            'invoice_products_value' => 28.99,
+            'invoice_cfop' =>  '3650'
+          }
+        }
+      ]
+    }
+  end
+
+  it 'order volumes update' do
+    expect(subject.connection).to receive(:post).with('shipment_order/set_volume', order_volumes)
+    subject.set_volume.update(order_volumes)
   end
 
   let(:order_tracking_code) do
